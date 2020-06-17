@@ -1,0 +1,49 @@
+#ifndef stat_H_INCLUDED
+#define stat_H_INCLUDED
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <SDL/SDL.h>
+#include <stdbool.h>
+#include <math.h>
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
+#include <SDL/SDL_mixer.h>ji
+
+#include "perso.h"
+#include "entite.h"
+
+typedef struct
+{
+  //creation police/font du texte
+  TTF_Font* police_score;
+  //creation couleur du texte
+
+  //creation texte score
+  SDL_Surface *texte_score;
+
+  SDL_Rect pos_texte_score;
+
+} score_pers;
+
+typedef struct
+{
+  //creation police/font du texte
+  TTF_Font* police_vie;
+  //creation couleur du texte
+
+  //creation texte vie
+  SDL_Surface *texte_vie;
+  SDL_Rect pos_texte_vie;
+
+} vie_pers;
+
+void  init_score(score_perso* s);
+void  init_vie(vie_perso* v);
+int gestion_vie_score(perso* p, entite *e);
+void afficher_vie_score(perso* p,SDL_Surface* screen,score_perso* s, vie_perso* v);
+void afficher_vie(perso* p,SDL_Surface* screen,vie_perso* v);
+void afficher_score(perso* p,SDL_Surface* screen,score_perso* s);
+
+
+#endif
