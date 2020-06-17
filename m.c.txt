@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <SDL/SDL_mixer.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+int main (int argc,char** argv)
+{
+	SDL_Surface *screen=NULL;
+	SDL_Surface *image=NULL;
+        SDL_Surface *detective=NULL;
+	SDL_Rect positionecran,detec,direction;
+int done=1;
+positionecran.x=0;
+positionecran.y=0;
+detec.x=300;
+detec.y=150;
+SDL_Init(SDL_INIT_EVERYTHING);
+screen=SDL_SetVideoMode(600,400,32,SDL_HWSURFACE);
+SDL_WM_SetCaption("chargement d'image en SDL",NULL);
+image=IMG_Load("background.bmp");
+if(!image)
+{
+printf("unable to load bitmap :%s\n",SDL_GetError());
+return -1;}
+detective=IMG_Load("detective.png");
+SDL_SetColorKey(detective,SDL_SRCCOLORKEY,SDL_MapRGB(detective->format ,255,255,255));
+if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024)==-1)
+// AP| Mixer init
+{
+printf("%s\n",Mix_GetError());
+}
+Mix_Music *music; //construct mix_music_pointer
+music=Mix_LoadMUS("music.mp3"); //Load the music
+Mix_PlayMusic(music, -1);//play music;
+while(done)
+{
+SDL_Event event;
+while (SDL_PollEvent(&event))
+{
+switch(event.type)
+{
+	case SDL_QUIT:
+done=0;
+break;
+	case SDL_KEYDOWN:
+if (event.key.keysym.sym==SDLK_RIGHT)
+{
+done=1;
+detec.x+=10;
+}
+if (event.key.keysym.sym==SDLK_LEFT)
+{
+done=1;
+detec.x-=10;}
+if (event.key.keysym.sym==SDLK_UP)
+{
+done=1;
+detec.y-=10;}
+if (event.key.keysym.sym==SDLK_DOWN)
+{
+done=1;
+detec.y+=10;}
+break;
+}
+}
+SDL_BlitSurface(image,NULL,screen,&positionecran);
+SDL_BlitSurface(detective,NULL,screen,&detec);
+SDL_Flip(screen);
+}
+SDL_FreeSurface(image);
+SDL_FreeSurface(detective);
+Mix_FreeMusic(music);
+Mix_CloseAudio();
+
+return 0;
+}
